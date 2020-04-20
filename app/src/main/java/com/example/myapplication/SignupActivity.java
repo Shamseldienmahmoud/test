@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.myapplication.Models.User;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,6 +50,13 @@ public class SignupActivity extends AppCompatActivity {
                 CreateUser();
             }
         });
+        signin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent (getApplication(), LoginActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void CreateUser() {
@@ -66,24 +74,12 @@ public class SignupActivity extends AppCompatActivity {
                 try {
 
                     JSONObject jsonObject = new JSONObject(response);
-                    Log.i("tagconvertstr", "["+jsonObject+"]");
+
                     if (!jsonObject.getBoolean("error")){
                         Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-
-                      JSONObject object = jsonObject.getJSONObject("user");
-                        User user = new User(
-                                object.getInt("id"),
-                                object.getString("fname"),
-                                object.getString("lname"),
-                                object.getString("username"),
-                                object.getString("email"),
-                                object.getString("mobile")
-                        );
-                        SharedPrefManger.getInstance(getApplicationContext()).userLogin(user);
-
-                        //starting the profile activity
                         finish();
-                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        Intent i = new Intent (SignupActivity.this, HomeActivity.class);
+                        startActivity(i);
 
                     }
                     else {
@@ -91,20 +87,19 @@ public class SignupActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(SignupActivity.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                 Toast.makeText(SignupActivity.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+               Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         }){
+
             @Override
-            protected Map<String, String> getPostParams() throws AuthFailureError {
+            protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("username", name);
                 params.put("email", mail);

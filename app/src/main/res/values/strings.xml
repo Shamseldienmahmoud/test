@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Subway</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="subway">Subway</string>
+    <string name="choose">From station</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

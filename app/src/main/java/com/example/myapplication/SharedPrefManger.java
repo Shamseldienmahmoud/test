@@ -1,10 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-
-import com.example.myapplication.Models.User;
 
 public class SharedPrefManger {
     private static final String SHARED_PREF_NAME = "volleyregisterlogin";
@@ -12,7 +9,7 @@ public class SharedPrefManger {
     private static final String KEY_LastNAME = "keylastname";
     private static final String KEY_EMAIL = "keyemail";
     private static final String KEY_USRNAME = "keyusername";
-    private static final String KEY_MOBILE = "keymobile";
+    private static final String KEY_IMAGE = "keyimage";
     private static final String KEY_ID = "keyid";
     private static SharedPrefManger mInstance;
     private static Context ctx;
@@ -26,38 +23,51 @@ public class SharedPrefManger {
         }
         return mInstance;
     }
-    public void userLogin(User user) {
+    public boolean userLogin(int id,String fname,String lname,String email,String username) {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(KEY_ID, user.getId());
-        editor.putString(KEY_FirstNAME, user.getFname());
-        editor.putString(KEY_LastNAME, user.getLname());
-        editor.putString(KEY_EMAIL, user.getEmail());
-        editor.putString(KEY_USRNAME,user.getUsername());
-        editor.putString(KEY_MOBILE,user.getUsername());
+        editor.putInt(KEY_ID, id);
+        editor.putString(KEY_FirstNAME, fname);
+        editor.putString(KEY_LastNAME,lname);
+        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_USRNAME,username);
        // editor.putString(KEY_Image, user.getEmail());
         editor.apply();
+        return true;
     }
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(KEY_EMAIL, null) != null;
+        if (sharedPreferences.getString(KEY_USRNAME,null)!=null){
+            return true;
+        }
+        else
+            return false;
     }
-    public User getUser() {
+    public String getusername(){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return new User(
-                sharedPreferences.getInt(KEY_ID, -1),
-                sharedPreferences.getString(KEY_EMAIL, null),
-                sharedPreferences.getString(KEY_FirstNAME,null),
-                sharedPreferences.getString(KEY_LastNAME,null),
-                sharedPreferences.getString(KEY_MOBILE,null),
-                sharedPreferences.getString(KEY_USRNAME,null)
-        );
+        return sharedPreferences.getString(KEY_USRNAME,null);
     }
-    public void logout() {
+    public String getfirstname(){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_FirstNAME,null);
+    }
+    public String getlastname(){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_LastNAME,null);
+    }
+    public String getId(){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return String.valueOf(sharedPreferences.getInt(KEY_ID,-1));
+    }
+    public String getemail(){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_EMAIL,null);
+    }
+    public Boolean logout() {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-        ctx.startActivity(new Intent(ctx, LoginActivity.class));
+        return true;
     }
 }

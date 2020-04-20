@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 public class SplashActivity extends AppCompatActivity {
     CoordinatorLayout coordinatorLayout;
     ImageView logo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +40,13 @@ public class SplashActivity extends AppCompatActivity {
                 public void run() {
                     try {
                         sleep(5000);
-                        Intent x=new Intent(getApplication(),SignupActivity.class);
-                        startActivity(x);
-                        finish();
+                        if (SharedPrefManger.getInstance(getApplicationContext()).isLoggedIn()) {
+                            startActivity(new Intent(getApplication(), HomeActivity.class));
+                            finish();
+                        }else {
+                            startActivity(new Intent(getApplication(), LoginActivity.class));
+                            finish();
+                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
